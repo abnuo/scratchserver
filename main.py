@@ -1,6 +1,19 @@
+import os
+import json
 from flask import Flask, render_template, request, abort, Response, redirect, jsonify, send_from_directory
 
 app = Flask(__name__, static_folder="/static")
+
+def getProjects():
+    with open("testprojects.json","r",encoding="utf-8") as f:
+        projects = json.loads(f.read())
+    return projects
+
+def addProject(id,title,description,creator,timestamp):
+    projects = getProjects()
+    projects[str(id)] = {"creator": creator, "title": title, "description": description, "timestamp": int(timestamp), "favorites": 0}
+    with open("testprojects.json","w",encoding="utf-8") as f:
+        f.write(json.dumps(projects))
 
 @app.route("/favicon.ico")
 def favicon():
